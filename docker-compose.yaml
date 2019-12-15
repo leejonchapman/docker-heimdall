@@ -1,0 +1,29 @@
+version: "3.5"
+volumes:
+  data:
+    driver_opts:
+      type: "nfs"
+      o: "addr=192.168.100.87,nolock,soft,rw"
+      device: ":/mnt/data/heimdall"
+services:
+  software:
+    restart: always
+    image: linuxserver/heimdall
+    container_name: heimdall
+    networks:
+      - internal_routeable
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/London
+    volumes:
+      - data:/config
+    labels:
+      - "traefik.enable=true"
+      - "traefik.frontend.rule=Host:home.leejonchapman.com"
+      - "traefik.frontend.passHostHeader=true"
+      - "traefik.frontend.headers.SSLRedirect=true"
+networks:
+  internal_routeable:
+    name: internal_routeable
+    external: true

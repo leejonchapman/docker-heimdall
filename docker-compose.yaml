@@ -11,19 +11,27 @@ services:
     image: linuxserver/heimdall
     container_name: heimdall
     networks:
-      - internal_routeable
+      - external_endpoint
+ #    - default
     environment:
       - PUID=1000
       - PGID=1000
       - TZ=Europe/London
     volumes:
       - data:/config
-    labels:
-      - "traefik.enable=true"
-      - "traefik.frontend.rule=Host:home.leejonchapman.com"
-      - "traefik.frontend.passHostHeader=true"
-      - "traefik.frontend.headers.SSLRedirect=true"
+    deploy:
+      labels:
+        traefik.enable: "true"
+        traefik.frontend.rule: "Host: home.leejonchapman.com"
+        traefik.frontend.passHostHeader: "true"
+        traefik.frontend.headers.SSLRedirect: "true"
+        traefik.docker.network: "external_endpoint"
+        traefik.port: 80 
+      placement:
+        constraints:
+          - node.role == worker
+      replicas: 1   
 networks:
-  internal_routeable:
-    name: internal_routeable
+  external_endpoint:
+    name: external_endpoint
     external: true

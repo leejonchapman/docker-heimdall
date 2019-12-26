@@ -29,7 +29,7 @@ services:
       placement:
         constraints:
           - node.role == worker
-      replicas: 1   
+      mode: global   
 networks:
   internal:
     name: internal

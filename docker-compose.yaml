@@ -25,11 +25,12 @@ services:
         traefik.frontend.passHostHeader: "true"
         traefik.frontend.headers.SSLRedirect: "true"
         traefik.docker.network: "internal"
-        traefik.port: 80 
+        traefik.port: 80
+        traefik.backend.loadbalancer.stickiness: "true"
       placement:
         constraints:
           - node.role == worker
-      mode: global   
+      mode: global
 networks:
   internal:
     name: internal

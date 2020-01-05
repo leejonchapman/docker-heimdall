@@ -7,9 +7,7 @@ volumes:
       device: ":/mnt/data/heimdall"
 services:
   software:
-    restart: always
     image: linuxserver/heimdall
-    container_name: heimdall
     networks:
       - internal
     environment:
@@ -31,6 +29,9 @@ services:
         constraints:
           - node.role == worker
       mode: global
+      restart_policy:
+        condition: any
+        max_attempts: 3
 networks:
   internal:
     name: internal
